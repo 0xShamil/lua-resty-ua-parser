@@ -8,19 +8,15 @@ local core_regex = require("resty.core.regex")
 local new_tab = core_base.new_tab
 local collect_captures = core_regex.collect_captures
 
-local UserAgent = require('resty.ua-parser.user_agent')
-
 local EMPTY_STR = ''
+local FAMILY = 'family'
+local MAJOR = 'major'
+local MINOR = 'minor'
+local PATCH = 'patch'
 
 local UAPattern = {}
 
 UAPattern.__index = UAPattern
-
-setmetatable(UAPattern, {
-    __call = function(cls, ...)
-        return cls.new(...)
-    end
-})
 
 function UAPattern.new(pattern, family_replacement, v1_replacement, v2_replacement)
     local self = setmetatable({}, UAPattern)
@@ -99,7 +95,16 @@ function UAPattern:match(ua_agent_str)
         end
     end
 
-    return family and UserAgent.new(family, v1, v2, v3) or nil
+    if not family then
+        return nil
+    end
+
+    return {
+        [FAMILY] = family,
+        [MAJOR] = v1,
+        [MINOR] = v2,
+        [PATCH] = v3
+    }
 end
 
 return UAPattern

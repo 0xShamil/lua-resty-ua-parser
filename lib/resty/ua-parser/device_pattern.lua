@@ -14,12 +14,6 @@ local DevicePattern = {}
 
 DevicePattern.__index = DevicePattern
 
-setmetatable(DevicePattern, {
-    __call = function(cls, ...)
-        return cls.new(...)
-    end
-})
-
 function DevicePattern.new(pattern, regex_flag, device_replacement)
     local self = setmetatable({}, DevicePattern)
 

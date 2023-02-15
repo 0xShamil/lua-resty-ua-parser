@@ -12,12 +12,6 @@ local DeviceParser = {}
 
 DeviceParser.__index = DeviceParser
 
-setmetatable(DeviceParser, {
-	__call = function(cls, ...)
-		return cls.new(...)
-	end
-})
-
 function DeviceParser.new(configs)
     local self = setmetatable({}, DeviceParser)
 

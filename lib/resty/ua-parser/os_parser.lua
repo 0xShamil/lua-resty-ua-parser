@@ -12,12 +12,6 @@ local OSParser = {}
 
 OSParser.__index = OSParser
 
-setmetatable(OSParser, {
-	__call = function(cls, ...)
-		return cls.new(...)
-	end
-})
-
 function OSParser.new(configs)
     local self = setmetatable({}, OSParser)
 

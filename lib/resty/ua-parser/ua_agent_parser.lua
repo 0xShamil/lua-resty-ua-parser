@@ -2,19 +2,14 @@ local ipairs = ipairs
 local setmetatable = setmetatable
 
 local UAPattern = require('resty.ua-parser.ua_pattern')
-local UserAgent = require('resty.ua-parser.user_agent')
 
-local OTHER = UserAgent.new("Other", nil, nil, nil)
+local OTHER = {
+    ['family'] = 'Other'
+}
 
 local UserAgentParser = {}
 
 UserAgentParser.__index = UserAgentParser
-
-setmetatable(UserAgentParser, {
-    __call = function(cls, ...)
-        return cls.new(...)
-    end
-})
 
 function UserAgentParser.new(configs)
 	local self = setmetatable({}, UserAgentParser)
