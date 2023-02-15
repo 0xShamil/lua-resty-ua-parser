@@ -11,8 +11,6 @@ local core_base = require("resty.core.base")
 local core_regex = require("resty.core.regex")
 local new_tab = core_base.new_tab
 
-local OS = require('resty.ua-parser.os')
-
 local collect_captures = core_regex.collect_captures
 local function compile_regex(pattern)
     local compiled, err, flags = core_regex.re_match_compile(pattern, 'joxi')
@@ -22,15 +20,14 @@ end
 
 local CG_ONE = [[($1)]]
 
+local FAMILY = 'family'
+local MAJOR = 'major'
+local MINOR = 'minor'
+local PATCH = 'patch'
+local PATCH_MINOR = 'patch_minor'
+
 local OSPattern = {}
-
 OSPattern.__index = OSPattern
-
-setmetatable(OSPattern, {
-    __call = function(cls, ...)
-        return cls.new(...)
-    end
-})
 
 function OSPattern.new(pattern, os_replacement, v1_replacement, v2_replacement,
                        v3_replacement)
@@ -75,7 +72,7 @@ function OSPattern:match(user_agent_str)
     if rc > 0 then
         local m = collect_captures(regex, rc, user_agent_str, pattern.flags, res)
 
-        local group_count = #m - 1 -- m[0] holds the whole substring being matched
+        local group_count = #m - 1
 
         if self.os_replacement then
             if group_count >= 1 then
@@ -116,7 +113,13 @@ function OSPattern:match(user_agent_str)
     if family == nil then
         return nil
     else
-        return OS(family, v1, v2, v3, v4)
+        return {
+            [FAMILY] = family,
+            [MAJOR] = v1,
+            [MINOR] = v2,
+            [PATCH] = v3,
+            [PATCH_MINOR] = v4
+        }
     end
 end
 

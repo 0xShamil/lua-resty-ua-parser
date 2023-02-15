@@ -3,9 +3,10 @@ local ipairs = ipairs
 local setmetatable = setmetatable
 
 local OSPattern = require('resty.ua-parser.os_pattern')
-local OS = require('resty.ua-parser.os')
 
-local OTHER = OS.new("Other", nil, nil, nil, nil)
+local OTHER = {
+    ['family'] = 'Other'
+}
 
 local OSParser = {}
 
